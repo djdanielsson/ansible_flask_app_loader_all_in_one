@@ -20,6 +20,4 @@ app_yum_packages:
 pip_dependencies:
   - virtualenv
   - psycopg2-binary
-  - psycopg2
-  - pip
 
