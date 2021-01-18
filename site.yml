@@ -1,3 +1,30 @@
-- import_playbook: provision_database_tier.yml
-- import_playbook: provision_app_tier.yml
-- import_playbook: provision_load_balancer_tier.yml
+---
+- name: Deploy, configure, and populate Postgres 10
+  hosts: database_servers
+  become: true
+  gather_facts: false
+  tags:
+    - database_servers
+  roles:
+    - postgres
+
+- name: Deploy, configure, and populate flask repo and virtualenv
+  hosts: app_servers
+  become: true
+  gather_facts: false
+  tags:
+    - application_servers
+    - flask
+  roles:
+    - app
+
+- name: Deploy haproxy load balancer
+  hosts: load_balancers
+  gather_facts: false
+  become: true
+
+  tags:
+    - load_balancers
+  roles:
+    - load_balancers
+
