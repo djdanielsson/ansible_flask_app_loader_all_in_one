@@ -11,13 +11,13 @@
     - name: Create flask user
       user:
         name: "{{ flask_user }}"
-        state: present  
+        state: present
 
     - name: Install flask packages
       package:
         name: "{{ __package }}"
         state: present
-      loop: "{{ app_yum_packages }}"        
+      loop: "{{ app_yum_packages }}"
       loop_control:
         loop_var: __package
 
@@ -25,13 +25,13 @@
       git:
         repo: "{{ flask_repo }}"
         dest: "{{ flask_home }}/{{ flask_app_name }}"
-        update: yes 
+        update: yes
         force: yes
       tags:
         - git
 
-    - name: "Change flash repo owner to {{ flask_user }} recursively"      
-      file: 
+    - name: "Change flash repo owner to {{ flask_user }} recursively"
+      file:
         dest: "{{ flask_home }}/{{ flask_app_name }}"
         owner: "{{ flask_user }}"
 
@@ -52,16 +52,16 @@
             virtualenv_command: /usr/local/bin/virtualenv
       tags:
         - venv
-        - virtualenv  
-          
+        - virtualenv
+
     - name: Initialize flask app database resources
       command: "{{ virtualenv_home }}/{{ flask_app_name }}/bin/python3 {{ flask_home }}/{{ flask_app_name }}/config.py"
       run_once: true
 
-    - name: "Generate {{ flask_app_name }} startup script"    
+    - name: "Generate {{ flask_app_name }} startup script"
       template:
         src: templates/launch_resource_hub.j2
-        dest: /usr/local/bin/launch_resource_hub   
+        dest: /usr/local/bin/launch_resource_hub
         mode: '0555'
 
     - name: template systemd service config
@@ -71,7 +71,7 @@
         mode: '0755'
 
     - name: start systemd app service
-      systemd: 
+      systemd:
         name: "{{ flask_app_name }}.service"
-        state: restarted 
+        state: restarted
         enabled: yes
