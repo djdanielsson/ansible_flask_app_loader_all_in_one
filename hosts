@@ -1,12 +1,13 @@
 [load_balancers]
-frontend 
+frontend1.127e.internal
 
 [app_servers]
-app-01
-app-02
+app2.127e.internal
+app1.127e.internal
 
 [database_servers]
-appdb1
+appdb1.127e.internal
+
 
 [internal:children]
 load_balancers
