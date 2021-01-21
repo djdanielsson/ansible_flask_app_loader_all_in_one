@@ -1,12 +1,12 @@
 [load_balancers]
-frontend1.127e.internal
+frontend1 ansible_host=192.0.2.150
 
 [app_servers]
-app2.127e.internal
-app1.127e.internal
+app1 ansible_host=192.0.2.185
+app2 ansible_host=192.0.2.173
 
 [database_servers]
-appdb1.127e.internal
+appdb1 ansible_host=192.0.2.164
 
 
 [internal:children]

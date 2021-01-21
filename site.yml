@@ -1,10 +1,33 @@
 ---
+- name: generating in-memory inventory
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Fetch Instance Info
+      os_server_info:
+        cloud: openstack
+        region_name: regionOne
+      register: r_os_servers
+      tags:
+        - everything
+
+    - name: Add host
+      add_host:
+        name: "{{ item.public_v4 }}"
+        group:
+          - "{{ item.metadata.group }}"
+          - "{{ item.metadata.deployment_name }}"
+      loop: "{{ r_os_servers.openstack_servers }}"
+      tags: 
+        - everything
+
 - name: Deploy, configure, and populate Postgres 10
   hosts: database_servers
   become: true
   gather_facts: false
   tags:
     - database_servers
+    - everything
   roles:
     - postgres
 
@@ -15,6 +38,7 @@
   tags:
     - application_servers
     - flask
+    - everything
   roles:
     - app
 
@@ -25,6 +49,7 @@
 
   tags:
     - load_balancers
+    - everything
   roles:
     - load_balancers
 
